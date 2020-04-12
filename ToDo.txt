@@ -1,0 +1,16 @@
+Matt:
+size_impl
+copy_nodes_impl
+find_impl
+max_element_impl
+traverse_inorder_impl
+min_greater_than_impl
+
+Connnor:
+empty_impl
+height_impl
+destroy_nodes_impl
+insert_impl
+min_element_impl
+check_sorting_invariant_impl
+traverse_preorder_impl
