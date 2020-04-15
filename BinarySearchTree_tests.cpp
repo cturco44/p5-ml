@@ -57,4 +57,26 @@ TEST(check_sorting_invariant) {
     ASSERT_TRUE(!tree.check_sorting_invariant());
 }
 
+TEST(check_copy){
+    BinarySearchTree<int> tree;
+    tree.insert(5);
+    tree.insert(4);
+    tree.insert(8);
+    tree.insert(6);
+    BinarySearchTree<int> fish(tree);
+    cout<<tree.to_string()<<endl;
+    cout<<fish.to_string();
+    ASSERT_EQUAL(tree.to_string(), fish.to_string());
+}
+
+TEST(check_max_elt){
+    BinarySearchTree<int> tree;
+    tree.insert(5);
+    tree.insert(4);
+    tree.insert(8);
+    tree.insert(6);
+    auto i = tree.max_element();
+    ASSERT_EQUAL(*i, 8);
+}
+
 TEST_MAIN()

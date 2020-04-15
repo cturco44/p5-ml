@@ -81,6 +81,7 @@ private:
     T datum;
     Node *left;
     Node *right;
+
   };
 
 public:
@@ -364,7 +365,10 @@ private:
   //          tree rooted at 'node'.
   // NOTE:    This function must be tree recursive.
   static Node *copy_nodes_impl(Node *node) {
-    assert(false);
+    if(!node)
+      return nullptr;
+    Node* ptr = new Node(node->datum, copy_nodes_impl(node->left), copy_nodes_impl(node->right));
+    return ptr;
   }
 
   // EFFECTS: Frees the memory for all nodes used in the tree rooted at 'node'.
@@ -465,7 +469,9 @@ private:
   // HINT: You don't need to compare any elements! Think about the
   //       structure, and where the largest element lives.
   static Node * max_element_impl(Node *node) {
-    assert(false);
+    if(!(node->right))
+      return node;
+    return max_element_impl(node->right);
   }
 
 
@@ -503,7 +509,11 @@ private:
   //       See https://en.wikipedia.org/wiki/Tree_traversal#In-order
   //       for the definition of a in-order traversal.
   static void traverse_inorder_impl(const Node *node, std::ostream &os) {
-    assert(false);
+    if(node) {
+      os << traverse_inorder_impl(node->left);
+      os << node->datum << " ";
+      os << traverse_inorder_impl(node->right);
+    }
   }
 
   // EFFECTS : Traverses the tree rooted at 'node' using a pre-order traversal,
@@ -514,7 +524,11 @@ private:
   //       See https://en.wikipedia.org/wiki/Tree_traversal#Pre-order
   //       for the definition of a pre-order traversal.
   static void traverse_preorder_impl(const Node *node, std::ostream &os) {
-    assert(false);
+    if(node) {
+      os << node->datum << " ";
+      os << traverse_inorder_impl(node->left);
+      os << traverse_inorder_impl(node->right);
+    }
   }
 
   // EFFECTS : Returns a pointer to the Node containing the smallest element
@@ -529,10 +543,29 @@ private:
   //       'less' parameter). Based on the result, you gain some information
   //       about where the element you're looking for could be.
   static Node * min_greater_than_impl(Node *node, const T &val, Compare less) {
-    assert(false);
+     
+    //If the value is greater than the current node
+    if(less(node-> datum, val)) {
+      //If there are no values greater than the current node
+      if(!node->right)
+        return nullptr;
+      //If there are values greater than current node see if greater than val
+      return min_greater_than_impl(node->right, val, less);
+    }
+    //If the value is smaller than the current node 
+    else{
+      //If no nodes to the left of this element that is greater than val
+      if(!node->left)
+        return node;
+      //If there are nodes to the left see if they are greater than val
+      auto ptr = min_greater_than_impl(node->left, val, less);
+      //If nodes to the left aren't greater than val return the current node
+      if(!ptr) 
+        return node;
+      //If nodes to the left are greater then return those
+      return ptr;    
+    }
   }
-
-
 }; // END of BinarySearchTree class
 
 #include "TreePrint.h" // DO NOT REMOVE!!!
