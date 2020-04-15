@@ -510,9 +510,9 @@ private:
   //       for the definition of a in-order traversal.
   static void traverse_inorder_impl(const Node *node, std::ostream &os) {
     if(node) {
-      os << traverse_inorder_impl(node->left);
+      traverse_inorder_impl(node->left, os);
       os << node->datum << " ";
-      os << traverse_inorder_impl(node->right);
+      traverse_inorder_impl(node->right, os);
     }
   }
 
@@ -526,8 +526,8 @@ private:
   static void traverse_preorder_impl(const Node *node, std::ostream &os) {
     if(node) {
       os << node->datum << " ";
-      os << traverse_inorder_impl(node->left);
-      os << traverse_inorder_impl(node->right);
+      traverse_preorder_impl(node->left, os);
+      traverse_preorder_impl(node->right, os);
     }
   }
 
@@ -544,15 +544,15 @@ private:
   //       about where the element you're looking for could be.
   static Node * min_greater_than_impl(Node *node, const T &val, Compare less) {
      
-    //If the value is greater than the current node
-    if(less(node-> datum, val)) {
+    //If the value is greater than or equal to the current node
+    if(less(node-> datum, val) || !less(val, node->datum)) {
       //If there are no values greater than the current node
       if(!node->right)
         return nullptr;
       //If there are values greater than current node see if greater than val
       return min_greater_than_impl(node->right, val, less);
     }
-    //If the value is smaller than the current node 
+    //If the value is smaller than or equal to the current node 
     else{
       //If no nodes to the left of this element that is greater than val
       if(!node->left)
