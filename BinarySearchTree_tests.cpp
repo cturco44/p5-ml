@@ -91,6 +91,7 @@ TEST(min_greater_than_impl){
     tree.insert(15);
     tree.insert(11);
     tree.insert(7);
+    tree.insert(7);
     auto i = tree.min_element();
     ASSERT_EQUAL(*(i++), 0);
     ASSERT_EQUAL(*(i++), 1);

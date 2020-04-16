@@ -5,6 +5,7 @@ find_impl
 max_element_impl
 traverse_inorder_impl
 min_greater_than_impl
+!!!Add some sort of test that tries to add duplicates
 
 Connnor:
 empty_impl
@@ -14,3 +15,5 @@ insert_impl
 min_element_impl
 check_sorting_invariant_impl
 traverse_preorder_impl
+
+operator[] for map.height_impl
