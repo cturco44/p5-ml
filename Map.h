@@ -90,7 +90,7 @@ public:
   //       (key, value) pairs, you'll need to construct a dummy value
   //       using "Value_type()".
   Iterator find(const Key_type& k) const{
-    return root.find(k);
+    return root.find(make_pair(k, Value_type()));
   };
 
   // MODIFIES: this
@@ -109,7 +109,15 @@ public:
   //           that element. This ensures the proper value-initialization is done.
   //
   // HINT: http://www.cplusplus.com/reference/map/map/operator[]/
-  Value_type& operator[](const Key_type& k);
+  Value_type& operator[](const Key_type& k){
+    auto i = find(k);
+    if(i != end())
+      return i->second;
+    else {
+      insert(make_pair(k, Value_type()));
+      return find(k)->second;
+    }
+  }
 
   // MODIFIES: this
   // EFFECTS : Inserts the given element into this Map if the given key
@@ -120,9 +128,10 @@ public:
   //           an iterator to the newly inserted element, along with
   //           the value true.
   std::pair<Iterator, bool> insert(const Pair_type &val){
-    auto i = root.find(val);
-    if(i == root.end())
+    auto i = find(val.first);
+    if(i == end()){
       return std::make_pair(root.insert(val), true);
+    }
     return std::make_pair(i,false);
   };
 
