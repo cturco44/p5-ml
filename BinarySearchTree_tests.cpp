@@ -27,9 +27,12 @@ TEST(test_stub) {
 TEST(empty_impl) {
     BinarySearchTree<int> tree;
     ASSERT_TRUE(tree.empty());
+    tree.insert(7);
+    ASSERT_TRUE(!tree.empty());
 }
 TEST(insert_impl) {
     BinarySearchTree<int> tree;
+    ASSERT_TRUE(tree.empty());
     tree.insert(5);
     tree.insert(4);
     tree.insert(8);
@@ -40,6 +43,13 @@ TEST(insert_impl) {
     vector<int> vec = {5,4,8,6};
     BinarySearchTree<int> *ptr = &tree;
     ASSERT_TRUE(compare_tree_to_array_int(vec, ptr));
+}
+TEST(insert_empty) {
+    BinarySearchTree<string> tree;
+    ASSERT_TRUE(tree.empty());
+    tree.insert("hello");
+    ASSERT_EQUAL(tree.size(), 1);
+    
 }
 
 TEST(check_sorting_invariant) {
@@ -56,6 +66,20 @@ TEST(check_sorting_invariant) {
     //cout << tree.to_string() << endl;
     ASSERT_TRUE(!tree.check_sorting_invariant());
 }
+TEST(check_sorting_invariant_string) {
+    BinarySearchTree<string> tree;
+    tree.insert("apple");
+    tree.insert("banana");
+    tree.insert("coolbeans");
+    ASSERT_TRUE(tree.check_sorting_invariant());
+    *tree.begin() = "waffle";
+    ASSERT_TRUE(!tree.check_sorting_invariant());
+    
+}
+TEST(check_sorting_invariant_empty) {
+    BinarySearchTree<int> tree;
+    ASSERT_TRUE(tree.check_sorting_invariant());
+}
 TEST(check_copy_nodes){
     BinarySearchTree<int> tree;
     tree.insert(5);
@@ -66,6 +90,13 @@ TEST(check_copy_nodes){
     //cout<<tree.to_string()<<endl;
     //cout<<fish.to_string();
     ASSERT_EQUAL(tree.to_string(), fish.to_string());
+}
+TEST(check_copy_nodes_empty) {
+    BinarySearchTree<int> tree;
+    BinarySearchTree<int> copy(tree);
+    
+    ASSERT_TRUE(tree.empty());
+    ASSERT_TRUE(copy.empty());
 }
 
 TEST(check_max_elt){
@@ -185,7 +216,11 @@ TEST(check_find){
     ASSERT_EQUAL(tree.find(2), tree.end());
     ASSERT_EQUAL(tree1.find(1), tree1.end());
 }
-
+//ok
+TEST(check_find_empty) {
+    BinarySearchTree<int> tree;
+    ASSERT_EQUAL(tree.find(7), tree.end());
+}
 TEST(traverse_inorder) {
     stringstream fish;
     BinarySearchTree<int> tree;
