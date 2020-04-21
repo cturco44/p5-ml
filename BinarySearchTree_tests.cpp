@@ -12,8 +12,8 @@ static bool compare_tree_to_array_int(vector<int> vec, BinarySearchTree<int> *tr
     }
     sort(vec.begin(), vec.end());
     auto itv = vec.begin();
-    for(auto it = tree->begin(); it != tree->end(); ++it) {
-        if(*it != *itv) {
+    for(auto i : *tree) {
+        if(i != *itv) {
             return false;
         }
         ++itv;
@@ -39,9 +39,9 @@ TEST(insert_impl) {
     
     vector<int> vec = {5,4,8,6};
     BinarySearchTree<int> *ptr = &tree;
-    //ASSERT_TRUE(compare_tree_to_array_int(vec, ptr));
-    
+    ASSERT_TRUE(compare_tree_to_array_int(vec, ptr));
 }
+
 TEST(check_sorting_invariant) {
     BinarySearchTree<int> tree;
     tree.insert(5);
@@ -78,6 +78,12 @@ TEST(check_max_elt){
     ASSERT_EQUAL(*i, 8);
 }
 
+TEST(max_elt_empty){
+    BinarySearchTree<int> tree;
+    auto i = tree.max_element();
+    ASSERT_EQUAL(i, tree.end());
+}
+
 TEST(min_greater_than_impl){
     BinarySearchTree<int> tree;
     tree.insert(5);
@@ -91,19 +97,14 @@ TEST(min_greater_than_impl){
     tree.insert(15);
     tree.insert(11);
     tree.insert(7);
-    tree.insert(7);
-    auto i = tree.min_element();
-    ASSERT_EQUAL(*(i++), 0);
-    ASSERT_EQUAL(*(i++), 1);
-    ASSERT_EQUAL(*(i++), 3);
-    ASSERT_EQUAL(*(i++), 4);
-    ASSERT_EQUAL(*(i++), 5);
-    ASSERT_EQUAL(*(i++), 6);
-    ASSERT_EQUAL(*(i++), 7);
-    ASSERT_EQUAL(*(i++), 8);
-    ASSERT_EQUAL(*(i++), 9);
-    ASSERT_EQUAL(*(i++), 11);
-    ASSERT_EQUAL(*(i++), 15);
+    auto i = tree.min_greater_than(7);
+    ASSERT_EQUAL(*(i), 8);
+}
+
+TEST(min_greater_than_impl_empty){
+    BinarySearchTree<int> tree;
+    auto i = tree.min_greater_than(7);
+    ASSERT_TRUE(i == tree.end());
 }
 
 TEST(min_element_impl){
@@ -131,6 +132,18 @@ TEST(min_element_impl){
     ASSERT_EQUAL(*(i++), 9);
     ASSERT_EQUAL(*(i++), 11);
     ASSERT_EQUAL(*(i++), 15);
+}
+
+TEST(min_element_empty){
+    BinarySearchTree<int> tree;
+    auto i = tree.min_element();
+    ASSERT_TRUE(i == tree.end());
+}
+
+TEST(max_element_empty){
+    BinarySearchTree<int> tree;
+    auto i = tree.max_element();
+    ASSERT_TRUE(i == tree.end());
 }
 
 TEST(check_size_impl){
@@ -185,6 +198,17 @@ TEST(traverse_inorder) {
     ASSERT_EQUAL(fish.str(), checks.str());
 }
 
+TEST(traverse_empty) {
+    stringstream fish;
+    stringstream corn;
+    BinarySearchTree<int> tree;
+    tree.traverse_inorder(fish);
+    tree.traverse_preorder(corn);
+    stringstream checks("");
+    ASSERT_EQUAL(fish.str(), checks.str());
+    ASSERT_EQUAL(corn.str(), checks.str());
+}
+
 TEST(traverse_preorder) {
     stringstream fish;
     BinarySearchTree<int> tree;
@@ -195,6 +219,27 @@ TEST(traverse_preorder) {
     tree.traverse_preorder(fish);
     stringstream checks("5 4 8 6 ");
     ASSERT_EQUAL(fish.str(), checks.str());
+}
+
+TEST(height) {
+    BinarySearchTree<int> tree;
+    tree.insert(5);
+    tree.insert(4);
+    tree.insert(15);
+    tree.insert(9);
+    tree.insert(8);
+    tree.insert(3);
+    tree.insert(0);
+    tree.insert(1);
+    tree.insert(7);
+    tree.insert(11);
+    tree.insert(6);
+    ASSERT_EQUAL(tree.height(), 6u);
+}
+
+TEST(height_empty) {
+    BinarySearchTree<int> tree;
+    ASSERT_EQUAL(tree.height(), 0u);
 }
 
 TEST_MAIN()

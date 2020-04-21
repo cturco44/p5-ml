@@ -469,6 +469,8 @@ private:
   // HINT: You don't need to compare any elements! Think about the
   //       structure, and where the largest element lives.
   static Node * max_element_impl(Node *node) {
+    if(!node)
+          return nullptr;
     if(!(node->right))
       return node;
     return max_element_impl(node->right);
@@ -543,7 +545,9 @@ private:
   //       'less' parameter). Based on the result, you gain some information
   //       about where the element you're looking for could be.
   static Node * min_greater_than_impl(Node *node, const T &val, Compare less) {
-     
+    //If tree empty return null
+    if(!node)
+      return nullptr; 
     //If the value is greater than or equal to the current node
     if(less(node-> datum, val) || !less(val, node->datum)) {
       //If there are no values greater than the current node

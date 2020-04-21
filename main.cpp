@@ -9,11 +9,12 @@
 #include <cassert>  //assert
 #include <iostream> //ostream
 #include <functional> //less
-#include "BinarySearchTree.h"
-#include "Map.h"
+#include <map>
+#include <set>
 #include "csvstream.h"
 #include <string>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 
@@ -207,7 +208,9 @@ int main(int argc, char* argv[]) {
     }
     Classifier training;
     
-    cout << "training data:" << endl;
+    if(debug)
+        cout<<"training data:"<<endl;
+    
     read_in(training, trainingfile, debug);
     cout << "trained on " << training.get_numposts() << " examples" << endl;
     if(debug) {
