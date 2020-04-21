@@ -367,7 +367,8 @@ private:
   static Node *copy_nodes_impl(Node *node) {
     if(!node)
       return nullptr;
-    Node* ptr = new Node(node->datum, copy_nodes_impl(node->left), copy_nodes_impl(node->right));
+    Node* ptr = new Node(node->datum, copy_nodes_impl(node->left), 
+    copy_nodes_impl(node->right));
     return ptr;
   }
 

@@ -221,6 +221,7 @@ TEST(check_find_empty) {
     BinarySearchTree<int> tree;
     ASSERT_EQUAL(tree.find(7), tree.end());
 }
+
 TEST(traverse_inorder) {
     stringstream fish;
     BinarySearchTree<int> tree;
@@ -275,6 +276,32 @@ TEST(height) {
 TEST(height_empty) {
     BinarySearchTree<int> tree;
     ASSERT_EQUAL(tree.height(), 0u);
+}
+
+TEST(no_hard_code_less) {
+    class Compare{
+        public:
+        bool operator() (string lhs, string rhs) {
+            return lhs > rhs;
+        }
+    };
+
+    BinarySearchTree<string, Compare> tree;
+    tree.insert("a");
+    tree.insert("b");
+    tree.insert("d");
+    tree.insert("c");
+    auto i = tree.begin();
+    string check = "c";
+    string check1 = "b";
+    string check2 = "a";
+    string check3 = "d";
+
+    ASSERT_EQUAL(*i, check3);
+    ASSERT_EQUAL(*(++i), check);
+    ASSERT_EQUAL(*(++i), check1);
+    ASSERT_EQUAL(*(++i), check2);
+    ASSERT_TRUE(tree.check_sorting_invariant());
 }
 
 TEST_MAIN()

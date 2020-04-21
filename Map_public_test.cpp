@@ -56,6 +56,13 @@ TEST(map_public_test) {
   ASSERT_EQUAL(word, "pi");
   ASSERT_ALMOST_EQUAL(number, 3.14159, 0.00001);
 
+  Map<string, double> fish(words);
+  auto found = fish.find("hello");
+  ASSERT_EQUAL((*found).second, 1);
+
+  fish["horn"] = 12;
+  words = fish;
+  ASSERT_EQUAL(words["horn"], 12);
   // When using the [] notation. An element not found is automatically created.
   // If the value type of the map is numeric, it will always be 0 "by default".
   ASSERT_EQUAL(words["bleh"], 0.0);

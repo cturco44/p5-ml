@@ -67,8 +67,6 @@ public:
   // you should omit them. A user of the class must be able to create,
   // copy, assign, and destroy Maps.
 
-//I don't think that we need to define these. We can try it without defining them and if it works then we don't need them
-
   // EFFECTS : Returns whether this Map is empty.
   bool empty() const{
     if(root.begin() == root.end())

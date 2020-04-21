@@ -101,7 +101,8 @@ private:
     
     class SecondElementLess {
     public:
-        bool operator() (const pair<string, double> &lhs, const pair<string, double> &rhs) {
+        bool operator() (const pair<string, double> &lhs, 
+                        const pair<string, double> &rhs) {
             return lhs.second < rhs.second;
         }
     };
