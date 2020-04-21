@@ -81,3 +81,12 @@ style :
     --files $(FILES)
 	@echo "########################################"
 	@echo "EECS 280 style checks PASS"
+
+sync :
+	rsync \
+-rtv \
+--delete \
+--exclude '.git*' \
+--filter=':- .gitignore' \
+../p5-ml/ \
+cturco@login.engin.umich.edu:51-ml-copy/

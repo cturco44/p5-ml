@@ -40,10 +40,10 @@ public:
         cout << "classes:" << endl;
         for (auto i : label) {
             cout << "  " << i.first << ", " << i.second
-            << " examples, log prior = " << log_prior(i.first) << endl;
+            << " examples, log-prior = " << log_prior(i.first) << endl;
         }
         
-        cout << "classifier parameters: " << endl;
+        cout << "classifier parameters:" << endl;
         for(map<string, map<string, int>>:: iterator outer = cw.begin();
             outer != cw.end(); ++outer) {
             for(map<string, int>::iterator inner = outer->second.begin();
@@ -56,7 +56,7 @@ public:
         }
     }
 
-    vector<pair<string,double>>::iterator most_probable(const Classifier &a1) const {
+    pair<string,double>most_probable(const Classifier &a1) const {
         vector<pair<string, double>> scores;
         for (auto i: a1.label) {
             double totalscore = a1.log_prior(i.first);
@@ -69,7 +69,7 @@ public:
             scores.push_back(pair1);
         }
         auto it = max_element(scores.begin(), scores.end(), SecondElementLess());
-        return it;
+        return *it;
     }
     double log_prior(string label_in) const {
         double numerator = label.at(label_in);
@@ -128,7 +128,7 @@ void read_in(Classifier &read_to, string filename, bool debug) {
         auto set = unique_words(row["content"]);
         read_to.read_row(set, row["tag"]);
         if(debug) {
-            cout << "label = " << row["tag"] << ", content = "
+            cout << "  label = " << row["tag"] << ", content = "
             << row["content"] << endl;
         }
         
@@ -149,11 +149,11 @@ void read_in_test(Classifier &training, string filename) {
         read_to.read_row(set, row["tag"]);
         
         cout << "  correct = " << row["tag"] << ", predicted = "
-        << read_to.most_probable(training)->first << ", log-probability score = "
-        << read_to.most_probable(training)->second << endl;
+        << read_to.most_probable(training).first << ", log-probability score = "
+        << read_to.most_probable(training).second << endl;
         
         cout << "  content = " << row["content"] << endl << endl;
-        if(row["tag"] == read_to.most_probable(training)->first) {
+        if(row["tag"] == read_to.most_probable(training).first) {
             ++total_correct;
         }
     }
@@ -206,7 +206,8 @@ int main(int argc, char* argv[]) {
         return 7;
     }
     Classifier training;
-
+    
+    cout << "training data:" << endl;
     read_in(training, trainingfile, debug);
     cout << "trained on " << training.get_numposts() << " examples" << endl;
     if(debug) {
