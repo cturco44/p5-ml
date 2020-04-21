@@ -304,4 +304,50 @@ TEST(no_hard_code_less) {
     ASSERT_TRUE(tree.check_sorting_invariant());
 }
 
+TEST(complex) {
+    class Compare{
+        public:
+        bool operator() (int lhs, int rhs) {
+            return lhs > rhs;
+        }
+    };
+
+    class Compare1{
+        public:
+        bool operator() (pair<int, double> lhs, 
+                pair<int, double> rhs) {
+            return lhs.second > rhs.second;
+        }
+    };
+
+    BinarySearchTree<int, Compare> tree;
+    tree.insert(5);
+    tree.insert(4);
+    tree.insert(7);
+    tree.insert(6);
+    ASSERT_EQUAL(tree.height(), 3u);
+    BinarySearchTree<int, Compare> tree1(tree);
+    ASSERT_EQUAL(tree.size(), 4u);
+    stringstream fish;
+    tree.traverse_inorder(fish);
+    stringstream check ("7 6 5 4 ");
+    ASSERT_EQUAL(fish.str(), check.str());
+    BinarySearchTree<int, Compare> corn;
+    ASSERT_EQUAL(tree.end(), corn.begin());    
+
+    ASSERT_EQUAL(tree.find(8), tree.end());
+    tree.insert(8);
+    ASSERT_EQUAL(*(tree.begin()), 8);
+
+    ASSERT_TRUE(tree.min_greater_than(0) == tree.end());
+    ASSERT_EQUAL(*(tree.max_element()), 4);
+    ASSERT_EQUAL(*(tree.min_element()), 8);
+    ASSERT_EQUAL(*(tree.min_greater_than(9)), 8);
+    BinarySearchTree<pair<int,double>, Compare1> cow;
+    cow.insert({1,2});
+    cow.insert({3,4.0});
+    ASSERT_EQUAL(*(cow.begin()), make_pair(3,4.0));
+    
+
+}
 TEST_MAIN()
