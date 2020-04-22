@@ -6,7 +6,8 @@
 using namespace std;
 
 //Compares tree to sorted array;
-static bool compare_tree_to_array_int(vector<int> vec, BinarySearchTree<int> *tree) {
+static bool compare_tree_to_array_int(vector<int> vec, 
+                BinarySearchTree<int> *tree) {
     if(vec.size() != tree->size()) {
         return false;
     }
@@ -19,10 +20,6 @@ static bool compare_tree_to_array_int(vector<int> vec, BinarySearchTree<int> *tr
         ++itv;
     }
     return true;
-}
-TEST(test_stub) {
-    // Add your tests here
-    ASSERT_TRUE(true);
 }
 TEST(empty_impl) {
     BinarySearchTree<int> tree;
@@ -49,7 +46,6 @@ TEST(insert_empty) {
     ASSERT_TRUE(tree.empty());
     tree.insert("hello");
     ASSERT_EQUAL(tree.size(), 1);
-    
 }
 
 TEST(check_sorting_invariant) {
@@ -72,6 +68,7 @@ TEST(check_sorting_invariant_string) {
     tree.insert("banana");
     tree.insert("coolbeans");
     ASSERT_TRUE(tree.check_sorting_invariant());
+    ASSERT_EQUAL(tree.find("apple"), tree.begin());
     *tree.begin() = "waffle";
     ASSERT_TRUE(!tree.check_sorting_invariant());
     
@@ -252,8 +249,9 @@ TEST(traverse_preorder) {
     tree.insert(4);
     tree.insert(8);
     tree.insert(6);
+    tree.insert(7);
     tree.traverse_preorder(fish);
-    stringstream checks("5 4 8 6 ");
+    stringstream checks("5 4 8 6 7 ");
     ASSERT_EQUAL(fish.str(), checks.str());
 }
 
@@ -326,6 +324,7 @@ TEST(complex) {
     tree.insert(7);
     tree.insert(6);
     ASSERT_EQUAL(tree.height(), 3u);
+    tree = tree;
     BinarySearchTree<int, Compare> tree1(tree);
     ASSERT_EQUAL(tree.size(), 4u);
     stringstream fish;
@@ -334,11 +333,11 @@ TEST(complex) {
     ASSERT_EQUAL(fish.str(), check.str());
     BinarySearchTree<int, Compare> corn;
     ASSERT_EQUAL(tree.end(), corn.begin());    
-
+    ASSERT_TRUE(tree.check_sorting_invariant());
     ASSERT_EQUAL(tree.find(8), tree.end());
     tree.insert(8);
     ASSERT_EQUAL(*(tree.begin()), 8);
-
+    ASSERT_TRUE(tree.check_sorting_invariant());
     ASSERT_TRUE(tree.min_greater_than(0) == tree.end());
     ASSERT_EQUAL(*(tree.max_element()), 4);
     ASSERT_EQUAL(*(tree.min_element()), 8);
@@ -347,7 +346,31 @@ TEST(complex) {
     cow.insert({1,2});
     cow.insert({3,4.0});
     ASSERT_EQUAL(*(cow.begin()), make_pair(3,4.0));
-    
+}
 
+TEST(vector_test) {
+     class Compare{
+        public:
+        bool operator() (vector<int> lhs, 
+                            vector<int> rhs) {
+            return lhs[0] > rhs[0];
+        }
+    };
+    
+    BinarySearchTree<vector<int>, Compare> fish;
+    vector<int> uno = {1,2};
+    vector<int> dos = {2,3};
+    vector<int> tres = {3,4};
+    fish.insert(tres);
+    fish.insert(uno);
+    fish.insert(dos);
+    ASSERT_TRUE(fish.check_sorting_invariant());
+    ASSERT_EQUAL(fish.find(dos), ++(fish.begin()));
+    ASSERT_EQUAL(*(fish.min_element()), tres);
+    ASSERT_EQUAL(fish.max_element(), ++++(fish.begin()));
+    ASSERT_FALSE(fish.empty());
+    ASSERT_EQUAL(fish.size(), 3u);
+    ASSERT_EQUAL(fish.height(), 3u);
+    ASSERT_EQUAL(*(fish.min_greater_than(tres)), dos);
 }
 TEST_MAIN()
