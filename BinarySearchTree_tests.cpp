@@ -361,15 +361,21 @@ TEST(vector_test) {
     vector<int> uno = {1,2};
     vector<int> dos = {2,3};
     vector<int> tres = {3,4};
-    fish.insert(tres);
-    fish.insert(uno);
-    fish.insert(dos);
+    vector<int> cuatro = {4,5};
+    auto i = fish.insert(tres);
+    ASSERT_EQUAL(i, fish.begin());
+    auto j = fish.insert(uno);
+    ASSERT_EQUAL(j, ++fish.begin());
+    auto k = fish.insert(dos);
+    ASSERT_EQUAL(*k, dos);
+    auto h = fish.insert(cuatro);
+    ASSERT_EQUAL(h, fish.begin());
     ASSERT_TRUE(fish.check_sorting_invariant());
-    ASSERT_EQUAL(fish.find(dos), ++(fish.begin()));
-    ASSERT_EQUAL(*(fish.min_element()), tres);
-    ASSERT_EQUAL(fish.max_element(), ++++(fish.begin()));
+    ASSERT_EQUAL(fish.find(dos), ++++(fish.begin()));
+    ASSERT_EQUAL(*(fish.min_element()), cuatro);
+    ASSERT_EQUAL(fish.max_element(), ++++++(fish.begin()));
     ASSERT_FALSE(fish.empty());
-    ASSERT_EQUAL(fish.size(), 3u);
+    ASSERT_EQUAL(fish.size(), 4u);
     ASSERT_EQUAL(fish.height(), 3u);
     ASSERT_EQUAL(*(fish.min_greater_than(tres)), dos);
 }
